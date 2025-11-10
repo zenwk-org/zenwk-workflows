@@ -47,15 +47,26 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      # 5. Cache Gradle
-      - name: Cache Gradle packages
+      # 5. Cache Gradle dependencies y nativos
+      - name: Cache Gradle dependencies and native binaries
         uses: actions/cache@v4
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/native
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      # 6. Build y análisis SonarCloud usando el archivo central
+      # 6. Cache Gradle wrapper
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/wrapper/dists
+          key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-wrapper-
+
+
+      # 7. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
         working-directory: ${{ inputs.microserviceDir }}
         env:
