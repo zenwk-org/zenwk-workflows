@@ -9,6 +9,9 @@ on:
       organization:
         required: true
         type: string
+      microserviceDir:         
+        required: true
+        type: string
     secrets:
       SONAR_TOKEN:
         required: true
@@ -56,4 +59,5 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
+        working-directory: ${{ inputs.microserviceDir }}
         run: ./gradlew clean build sonar -x test --info
