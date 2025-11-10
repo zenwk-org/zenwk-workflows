@@ -19,6 +19,8 @@ Estos workflows permiten estandarizar los procesos de:
 ---
 
 ## Estructura del Repositorio
+
+```text
 zenwk-workflows/
 ├── .github/
 │   └── workflows/
