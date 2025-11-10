@@ -9,7 +9,7 @@ on:
       organization:
         required: true
         type: string
-      microserviceDir:         
+      microserviceDir:
         required: true
         type: string
     secrets:
@@ -21,17 +21,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout repo completo
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      # 2. Configurar JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: temurin
 
+      # 3. Cache SonarCloud
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
@@ -39,25 +42,28 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      # 4. Cache Gradle
       - name: Cache Gradle packages
         uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      # Preparar configuración de Sonar en el microservicio
+      # 5. Generar sonar-project.properties con rutas relativas
       - name: Generate sonar-project.properties
         run: |
-          echo "sonar.projectKey=${{ inputs.projectKey }}" > ${{ github.workspace }}/${{ inputs.microserviceDir }}/sonar-project.properties
-          echo "sonar.organization=${{ inputs.organization }}" >> ${{ github.workspace }}/${{ inputs.microserviceDir }}/sonar-project.properties
-          echo "sonar.host.url=https://sonarcloud.io" >> ${{ github.workspace }}/${{ inputs.microserviceDir }}/sonar-project.properties
-          echo "sonar.projectBaseDir=${{ github.workspace }}/${{ inputs.microserviceDir }}" >> ${{ github.workspace }}/${{ inputs.microserviceDir }}/sonar-project.properties
-          echo "sonar.projectProperties=${{ github.workspace }}/sonar/sonar-common.properties" >> ${{ github.workspace }}/${{ inputs.microserviceDir }}/sonar-project.properties
+          MICRO_DIR="${{ inputs.microserviceDir }}"
+          echo "sonar.projectKey=${{ inputs.projectKey }}" > $MICRO_DIR/sonar-project.properties
+          echo "sonar.organization=${{ inputs.organization }}" >> $MICRO_DIR/sonar-project.properties
+          echo "sonar.host.url=https://sonarcloud.io" >> $MICRO_DIR/sonar-project.properties
+          echo "sonar.projectBaseDir=." >> $MICRO_DIR/sonar-project.properties
+          # sonar-common.properties relativo al microservicio
+          echo "sonar.projectProperties=../../sonar/sonar-common.properties" >> $MICRO_DIR/sonar-project.properties
 
-      # Ejecutar build y análisis
+      # 6. Build y análisis SonarCloud
       - name: Build and analyze with SonarCloud
-        working-directory: ${{ github.workspace }}/${{ inputs.microserviceDir }}
+        working-directory: ${{ inputs.microserviceDir }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew clean build sonarqube -x test --info
