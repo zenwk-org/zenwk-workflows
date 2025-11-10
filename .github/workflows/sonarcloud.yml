@@ -49,7 +49,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      # 5. Build y análisis SonarCloud pasando parámetros directamente
+      # 5. Build y análisis SonarCloud
       - name: Build and analyze with SonarCloud
         working-directory: ${{ inputs.microserviceDir }}
         env:
@@ -65,4 +65,5 @@ jobs:
             -Dsonar.sources=src/main/java \
             -Dsonar.tests=src/test/java \
             -Dsonar.test.inclusions=**/*Test.java \
+            -Dsonar.projectProperties=sonar/sonar-common.properties \
             --info
