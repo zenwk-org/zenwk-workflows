@@ -52,7 +52,7 @@ jobs:
           echo "sonar.organization=${{ inputs.organization }}" >> sonar-project.properties
           echo "sonar.host.url=https://sonarcloud.io" >> sonar-project.properties
           echo "include=sonar/sonar-common.properties" >> sonar-project.properties
-          echo "sonar.projectBaseDir=." >> sonar-project.properties
+          echo "sonar.projectBaseDir=${{ inputs.microserviceDir }}" >> sonar-project.properties
           echo "sonar.projectProperties=sonar/sonar-common.properties" >> sonar-project.properties
 
       - name: Build and analyze with SonarCloud
