@@ -3,6 +3,7 @@
 Repositorio público que contiene los **workflows reutilizables** de CI/CD utilizados por los microservicios y componentes del ecosistema **Zenwk**.
 
 Estos workflows permiten estandarizar los procesos de:
+
 - Construcción y análisis de código.
 - Integración con SonarCloud.
 - Pruebas automatizadas.
@@ -33,26 +34,3 @@ zenwk-workflows/
 │   └── sonar-common.properties        # Configuración base para todos los análisis Sonar
 ├── README.md
 └── LICENSE
-
----
-
-## Uso desde otro repositorio
-
-Ejemplo en `.github/workflows/sonar.yml` dentro de un microservicio Zenwk:
-
-```yaml
-name: SonarCloud Analysis
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    types: [ opened, synchronize, reopened ]
-
-jobs:
-  sonar:
-    uses: zenwk-org/zenwk-workflows/.github/workflows/sonarcloud.yml@main
-    with:
-      projectKey: zenwk-verification
-      organization: zenwk-org
-    secrets: inherit
