@@ -55,15 +55,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          ./gradlew clean build sonarqube \
-            -x test \
-            -Dsonar.projectKey=${{ inputs.projectKey }} \
-            -Dsonar.organization=${{ inputs.organization }} \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.java.binaries=build/classes/java/main \
-            -Dsonar.sources=src/main/java \
-            -Dsonar.tests=src/test/java \
-            -Dsonar.test.inclusions=**/*Test.java \
-            -Dsonar.projectProperties=sonar/sonar-common.properties \
-            --info
+        run: ./gradlew build sonar -x test --info --debug --stacktrace
