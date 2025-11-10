@@ -21,19 +21,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout del repositorio
+      # 1. Checkout del microservicio
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 2. Configurar JDK 17
+      # 2. Descargar el common-sonar.properties desde zenwk-workflows
+      - name: Download common Sonar properties
+        run: |
+          curl -sL https://raw.githubusercontent.com/zenwk-org/zenwk-workflows/main/sonar/sonar-common.properties \
+            -o ${{ inputs.microserviceDir }}/sonar-common.properties
+
+      # 3. Configurar JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: temurin
 
-      # 3. Cache SonarCloud
+      # 4. Cache SonarCloud
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
@@ -41,7 +47,7 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      # 4. Cache Gradle
+      # 5. Cache Gradle
       - name: Cache Gradle packages
         uses: actions/cache@v4
         with:
@@ -49,10 +55,14 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      # 5. Build y análisis SonarCloud
+      # 6. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
         working-directory: ${{ inputs.microserviceDir }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
-        run: ./gradlew build sonar -x test --info --debug --stacktrace
+        run: ./gradlew build sonar -x test \
+          -Dsonar.projectKey=${{ inputs.projectKey }} \
+          -Dsonar.organization=${{ inputs.organization }} \
+          -Dsonar.properties.file=sonar-common.properties \
+          --info
