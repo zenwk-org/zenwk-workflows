@@ -1,0 +1,65 @@
+name: Reusable SonarCloud Analysis
+
+on:
+  workflow_call:
+    inputs:
+      projectKey:
+        required: true
+        type: string
+      organization:
+        required: true
+        type: string
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      GITHUB_TOKEN:
+        required: true
+
+jobs:
+  sonar-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      # Preparar configuración de Sonar
+      - name: Prepare Sonar configuration
+        run: |
+          echo "sonar.projectKey=${{ inputs.projectKey }}" > sonar-project.properties
+          echo "sonar.organization=${{ inputs.organization }}" >> sonar-project.properties
+          echo "sonar.host.url=https://sonarcloud.io" >> sonar-project.properties
+          echo "include=sonar/sonar-common.properties" >> sonar-project.properties
+
+      # Copiar configuración común desde este repositorio
+      - name: Copy shared sonar config
+        run: |
+          mkdir -p sonar
+          cp $GITHUB_WORKSPACE/sonar/sonar-common.properties sonar/sonar-common.properties
+
+      - name: Build and analyze with SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew clean build sonar -x test --info
