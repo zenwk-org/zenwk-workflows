@@ -61,8 +61,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
-        run: ./gradlew build sonar -x test \
-          -Dsonar.projectKey=${{ inputs.projectKey }} \
-          -Dsonar.organization=${{ inputs.organization }} \
-          -Dsonar.properties.file=sonar-common.properties \
-          --info
+        run: ./gradlew build sonar -x test -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dsonar.properties.file=sonar-common.properties --info
