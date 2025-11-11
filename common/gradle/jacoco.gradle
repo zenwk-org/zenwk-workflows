@@ -12,7 +12,7 @@ jacocoTestReport {
     reports {
         xml.required = true
         html.required = true
-        html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
     }
 
     def exclusions = [
