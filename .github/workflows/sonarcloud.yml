@@ -64,12 +64,15 @@ jobs:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-wrapper-
+      # 7. Compila y  ejecuta reporte de jacoco
+      - name: Run tests and generate coverage
+        working-directory: ${{ inputs.microserviceDir }}
+        run: ./gradlew clean test jacocoTestReport
 
-
-      # 7. Build y análisis SonarCloud usando el archivo central
+      # 8. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
         working-directory: ${{ inputs.microserviceDir }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
-        run: ./gradlew build sonar -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dsonar.properties.file=sonar-common.properties --info
+        run: ./gradlew sonar -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dsonar.properties.file=sonar-common.properties --info
