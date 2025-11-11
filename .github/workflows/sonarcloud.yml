@@ -60,7 +60,7 @@ jobs:
       # 6. Copy of file common/jacoco.gradle
       - name: Copy common Gradle scripts
         run: |
-          cp zenwk-workflows/common-gradle/jacoco.gradle ${{ inputs.microserviceDir }}/gradle/jacoco.gradle
+          cp zenwk-workflows/common/gradle/jacoco.gradle ${{ inputs.microserviceDir }}/gradle/jacoco.gradle
   
       # 7. Cache Gradle wrapper
       - name: Cache Gradle wrapper
