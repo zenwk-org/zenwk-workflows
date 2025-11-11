@@ -77,6 +77,13 @@ jobs:
         working-directory: ${{ inputs.microserviceDir }}
         run: ./gradlew clean test jacocoTestReport
 
+      - name: Show jacoco xml
+        run: |
+          echo "Files:"
+          find ${{ inputs.microserviceDir }}/build -name 'jacocoTestReport.xml' -print
+          echo "First lines:"
+          sed -n '1,80p' ${{ inputs.microserviceDir }}/build/reports/jacoco/test/jacocoTestReport.xml || true
+
       # 9. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
         working-directory: ${{ inputs.microserviceDir }}
