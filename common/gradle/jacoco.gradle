@@ -15,10 +15,6 @@ jacocoTestReport {
         xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
     }
 
-    additionalSourceDirs.from = files(sourceSets.main.allSource.srcDirs)
-    sourceDirectories.from = files(sourceSets.main.allSource.srcDirs)
-    classDirectories.from = files(sourceSets.main.output)
-
     def exclusions = [
         '**/config/**',
         '**/dto/**',
@@ -38,9 +34,4 @@ jacocoTestReport {
         '**/constants/**'
     ]
 
-    classDirectories.setFrom(
-        files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: exclusions)
-        })
-    )
 }
