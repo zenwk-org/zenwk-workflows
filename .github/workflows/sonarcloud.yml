@@ -81,6 +81,6 @@ jobs:
           ./gradlew sonar \
           -Dsonar.projectKey=${{ inputs.projectKey }} \
           -Dsonar.organization=${{ inputs.organization }} \
-          -Dsonar.exclusions="*src/test/**,**/config/**" \
+          -Dsonar.exclusions="src/test/**/*,**/config/**" \
           -Dsonar.coverage.exclusions="**/config/**,**/dto/**,**/common/component/**,**/common/helper/**,**/common/validation/**,**/common/exception/**,**/controller/**,**/message*/**,**/enums/**,**/exception/**,**/entity/**,**/model/**,**/*ZenwkApplication*,**/*ApplicationKt*,**/util/**,**/constants/**" \
           --info
