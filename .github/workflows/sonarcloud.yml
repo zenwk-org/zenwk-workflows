@@ -77,11 +77,11 @@ jobs:
         working-directory: ${{ inputs.microserviceDir }}
         run: ./gradlew clean test jacocoTestReport
 
-      - name: Find jacoco xmls
-        id: find_reports
-        run: |
-          files=$(find ${{ inputs.microserviceDir }} -type f -name "jacocoTestReport.xml" | paste -sd "," -)
-          echo "reports=$files" >> $GITHUB_OUTPUT
+      # - name: Find jacoco xmls
+      #   id: find_reports
+      #   run: |
+      #     files=$(find ${{ inputs.microserviceDir }} -type f -name "jacocoTestReport.xml" | paste -sd "," -)
+      #     echo "reports=$files" >> $GITHUB_OUTPUT
 
       # 9. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
@@ -89,4 +89,5 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
-        run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=${{ steps.find_reports.outputs.reports }}  -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
+        # run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=${{ steps.find_reports.outputs.reports }}  -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
+        run: ./gradlew sonar -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
