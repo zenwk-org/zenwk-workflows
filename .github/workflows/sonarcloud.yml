@@ -92,9 +92,9 @@ jobs:
         # run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=${{ steps.find_reports.outputs.reports }}  -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
         # run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml  -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
         #run: ./gradlew sonar -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dsonar.project.settings=sonar-common.properties --info
-        run: ./gradlew sonar \
+        run: |
+          ./gradlew clean test jacocoTestReport sonar \
           -Dsonar.projectKey=${{ inputs.projectKey }} \
           -Dsonar.organization=${{ inputs.organization }} \
-          -Dsonar.project.settings=sonar-common.properties \
           -Dsonar.coverage.exclusions="**/config/**,**/dto/**,**/common/component/**,**/common/helper/**,**/common/validation/**,**/common/exception/**,**/controller/**,**/message*/**,**/enums/**,**/exception/**,**/entity/**,**/model/**,**/*ZenwkApplication*,**/*ApplicationKt*,**/util/**,**/constants/**" \
           --info
