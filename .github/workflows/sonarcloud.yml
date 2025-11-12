@@ -26,12 +26,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 2. Descargar el common-sonar.properties desde zenwk-workflows
-      # - name: Download common Sonar properties
-      #   run: |
-      #     curl -sL https://raw.githubusercontent.com/zenwk-org/zenwk-workflows/main/sonar/sonar-common.properties \
-      #       -o ${{ inputs.microserviceDir }}/sonar-common.properties
-
       # 3. Descargar el common/gradle desde zenwk-workflows
       - name: Download common gradle 
         run: |
@@ -77,24 +71,16 @@ jobs:
         working-directory: ${{ inputs.microserviceDir }}
         run: ./gradlew clean test jacocoTestReport
 
-      # - name: Find jacoco xmls
-      #   id: find_reports
-      #   run: |
-      #     files=$(find ${{ inputs.microserviceDir }} -type f -name "jacocoTestReport.xml" | paste -sd "," -)
-      #     echo "reports=$files" >> $GITHUB_OUTPUT
-
       # 9. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
         working-directory: ${{ inputs.microserviceDir }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
-        # run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=${{ steps.find_reports.outputs.reports }}  -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
-        # run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml  -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
-        #run: ./gradlew sonar -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dsonar.project.settings=sonar-common.properties --info
         run: |
           ./gradlew sonar \
           -Dsonar.projectKey=${{ inputs.projectKey }} \
           -Dsonar.organization=${{ inputs.organization }} \
+          -Dsonar.exclusions="**/test/**,**/config/**" \
           -Dsonar.coverage.exclusions="**/config/**,**/dto/**,**/common/component/**,**/common/helper/**,**/common/validation/**,**/common/exception/**,**/controller/**,**/message*/**,**/enums/**,**/exception/**,**/entity/**,**/model/**,**/*ZenwkApplication*,**/*ApplicationKt*,**/util/**,**/constants/**" \
           --info
