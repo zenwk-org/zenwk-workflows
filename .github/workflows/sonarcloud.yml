@@ -90,4 +90,5 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         # run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=${{ steps.find_reports.outputs.reports }}  -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
-        run: ./gradlew sonar -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
+        # run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml  -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dproject.settings=sonar-common.properties --info
+        run: ./gradlew sonar -Dsonar.projectKey=${{ inputs.projectKey }} -Dsonar.organization=${{ inputs.organization }} -Dsonar.project.settings=sonar-common.properties --info
