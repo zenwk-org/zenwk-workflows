@@ -77,13 +77,22 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
+        # run: |
+        #   ./gradlew sonar \
+        #   -Dsonar.projectKey=${{ inputs.projectKey }} \
+        #   -Dsonar.organization=${{ inputs.organization }} \
+        #   -Dsonar.exclusions="**/config/**" \
+        #   -Dsonar.coverage.exclusions="**/config/**,**/dto/**,**/common/component/**,**/common/helper/**,**/common/validation/**,**/common/exception/**,**/controller/**,**/message*/**,**/enums/**,**/exception/**,**/entity/**,**/model/**,**/*ZenwkApplication*,**/*ApplicationKt*,**/util/**,**/constants/**" \
+        #   --info
         run: |
           ./gradlew sonar \
           -Dsonar.projectKey=${{ inputs.projectKey }} \
           -Dsonar.organization=${{ inputs.organization }} \
-          -Dsonar.exclusions="**/config/**" \
+          -Dsonar.sources=src/main/java \
+          -Dsonar.tests=src/test/java \
+          -Dsonar.test.exclusions=**/*Test.java \
           -Dsonar.coverage.exclusions="**/config/**,**/dto/**,**/common/component/**,**/common/helper/**,**/common/validation/**,**/common/exception/**,**/controller/**,**/message*/**,**/enums/**,**/exception/**,**/entity/**,**/model/**,**/*ZenwkApplication*,**/*ApplicationKt*,**/util/**,**/constants/**" \
           -Dsonar.issue.ignore.multicriteria=e1 \
-          -Dsonar.issue.ignore.multicriteria.e1.ruleKey="*" \
-          -Dsonar.issue.ignore.multicriteria.e1.resourceKey=".*Test\\.java" \
-          --info 
+          -Dsonar.issue.ignore.multicriteria.e1.ruleKey=* \
+          -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*Test.java \
+          --info
