@@ -26,6 +26,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      # 3. Descargar el common/gradle desde zenwk-workflows
+      - name: Download common gradle 
+        run: |
+          curl -sL https://raw.githubusercontent.com/zenwk-org/zenwk-workflows/main/common/gradle/jacoco.gradle \
+            -o ${{ inputs.microserviceDir }}/gradle/jacoco.gradle
 
       # 4. Configurar JDK 17
       - name: Set up JDK 17
@@ -64,7 +69,7 @@ jobs:
       # 8. Compila y  ejecuta reporte de jacoco
       - name: Run tests and generate coverage
         working-directory: ${{ inputs.microserviceDir }}
-        run: ./gradlew clean test
+        run: ./gradlew clean test jacocoTestReport
 
       # 9. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
