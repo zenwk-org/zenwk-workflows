@@ -85,5 +85,5 @@ jobs:
           -Dsonar.coverage.exclusions="**/config/**,**/dto/**,**/common/component/**,**/common/helper/**,**/common/validation/**,**/common/exception/**,**/controller/**,**/message*/**,**/enums/**,**/exception/**,**/entity/**,**/model/**,**/*ZenwkApplication*,**/*ApplicationKt*,**/util/**,**/constants/**" \
           -Dsonar.issue.ignore.multicriteria=e1 \
           -Dsonar.issue.ignore.multicriteria.e1.ruleKey="*" \
-          -Dsonar.issue.ignore.multicriteria.e1.resourceKey=".*Test\\.java \
+          -Dsonar.issue.ignore.multicriteria.e1.resourceKey=".*Test\\.java" \
           --info 
