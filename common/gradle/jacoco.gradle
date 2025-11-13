@@ -34,4 +34,10 @@ jacocoTestReport {
         '**/constants/**'
     ]
 
+    classDirectories.setFrom(
+        files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: exclusions)
+        })
+    )
+
 }
