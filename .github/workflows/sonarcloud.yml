@@ -88,4 +88,5 @@ jobs:
           -Dsonar.coverage.exclusions="**/config/**,**/dto/**,**/common/component/**,**/common/helper/**,**/common/validation/**,**/common/exception/**,**/controller/**,**/message*/**,**/enums/**,**/exception/**,**/entity/**,**/model/**,**/*ZenwkApplication*,**/*ApplicationKt*,**/util/**,**/constants/**" \
           -Dsonar.scm.provider=git \
           -Dsonar.scm.revision=${{ github.sha }} \
+          -Dsonar.cpd.exclusions=**/entity/**/*.java \
           --info
