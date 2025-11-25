@@ -81,6 +81,6 @@ jobs:
           -Dsonar.issue.ignore.multicriteria.e3.ruleKey=typescript:S6481 \
           -Dsonar.issue.ignore.multicriteria.e3.resourceKey=**/*.tsx \
           -Dsonar.issue.ignore.multicriteria.e4.ruleKey=typescript:S6571 \
-          -Dsonar.issue.ignore.multicriteria.e4.resourceKey=**/*.tsx
+          -Dsonar.issue.ignore.multicriteria.e4.resourceKey=**/*.tsx \
           -Dsonar.issue.ignore.multicriteria.e5.ruleKey=typescript:S7735 \
           -Dsonar.issue.ignore.multicriteria.e5.resourceKey=**/*.tsx
