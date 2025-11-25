@@ -65,21 +65,20 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           npx sonar-scanner \
-           -Dsonar.projectKey=zenwk-org_zenwk-frontend \
-           -Dsonar.organization=zenwk-org \
-           -Dsonar.sources=src \
-           -Dsonar.tests=src/__tests__ \
-           -Dsonar.test.inclusions="**/*.test.js,**/*.test.ts,**/*.test.tsx" \
-           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-           -Dsonar.sourceEncoding=UTF-8 \
-           -Dsonar.issue.ignore.multicriteria=e1,e2,e3,e4,e5 \
-           -Dsonar.issue.ignore.multicriteria.e1.ruleKey=typescript:S6754 \
-           -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*.tsx \
-           -Dsonar.issue.ignore.multicriteria.e2.ruleKey=typescript:S1301 \
-           -Dsonar.issue.ignore.multicriteria.e2.resourceKey=**/*.ts \
-           -Dsonar.issue.ignore.multicriteria.e3.ruleKey=typescript:S6481 \
-           -Dsonar.issue.ignore.multicriteria.e3.resourceKey=src/components/**/*.ts \
-           -Dsonar.issue.ignore.multicriteria.e4.ruleKey=typescript:S6571 \
-           -Dsonar.issue.ignore.multicriteria.e4.resourceKey=**/*.ts \
-           -Dsonar.issue.ignore.multicriteria.e5.ruleKey=typescript:S6571 \
-           -Dsonar.issue.ignore.multicriteria.e5.resourceKey=**/*.tsx
+          -Dsonar.projectKey=${{ inputs.projectKey }} \
+          -Dsonar.organization=${{ inputs.organization }} \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.sources=src \
+          -Dsonar.tests=src/__tests__ \
+          -Dsonar.test.inclusions="**/*.test.js,**/*.test.ts,**/*.test.tsx" \
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+          -Dsonar.sourceEncoding=UTF-8 \
+          -Dsonar.issue.ignore.multicriteria=e1,e2,e3,e4 \
+          -Dsonar.issue.ignore.multicriteria.e1.ruleKey=typescript:S6754 \
+          -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*.tsx \
+          -Dsonar.issue.ignore.multicriteria.e2.ruleKey=typescript:S1301 \
+          -Dsonar.issue.ignore.multicriteria.e2.resourceKey=**/*.ts \
+          -Dsonar.issue.ignore.multicriteria.e3.ruleKey=typescript:S6481 \
+          -Dsonar.issue.ignore.multicriteria.e3.resourceKey=**/*.tsx \
+          -Dsonar.issue.ignore.multicriteria.e4.ruleKey=typescript:S6571 \
+          -Dsonar.issue.ignore.multicriteria.e4.resourceKey=**/*.tsx
