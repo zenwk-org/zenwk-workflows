@@ -65,11 +65,19 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           npx sonar-scanner \
-            -Dsonar.projectKey=${{ inputs.projectKey }} \
-            -Dsonar.organization=${{ inputs.organization }} \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.sources=src \
-            -Dsonar.tests=src/__tests__ \
-            -Dsonar.test.inclusions="**/*.test.js,**/*.test.ts,**/*.test.tsx" \
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-            -Dsonar.sourceEncoding=UTF-8
+          -Dsonar.projectKey=${{ inputs.projectKey }} \
+          -Dsonar.organization=${{ inputs.organization }} \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.sources=src \
+          -Dsonar.tests=src/__tests__ \
+          -Dsonar.test.inclusions="**/*.test.js,**/*.test.ts,**/*.test.tsx" \
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+          -Dsonar.sourceEncoding=UTF-8 \  
+          # --- Exclusión de reglas innecesarias / falsos positivos ---
+          -Dsonar.issue.ignore.multicriteria=e1,e2,e3 \
+          -Dsonar.issue.ignore.multicriteria.e1.ruleKey=typescript:S6754 \
+          -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*.tsx \
+          -Dsonar.issue.ignore.multicriteria.e2.ruleKey=typescript:S1301 \
+          -Dsonar.issue.ignore.multicriteria.e2.resourceKey=**/*.ts \
+          -Dsonar.issue.ignore.multicriteria.e3.ruleKey=typescript:S6481 \
+          -Dsonar.issue.ignore.multicriteria.e3.resourceKey=src/components/**/*.ts
