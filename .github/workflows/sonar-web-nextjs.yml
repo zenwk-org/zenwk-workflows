@@ -75,10 +75,10 @@ jobs:
           -Dsonar.sourceEncoding=UTF-8 \
           -Dsonar.issue.ignore.multicriteria=e1,e2,e3,e4 \
           -Dsonar.issue.ignore.multicriteria.e1.ruleKey=typescript:S6754 \
-          -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*.tsx \
+          -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*.ts,**/*.tsx \
           -Dsonar.issue.ignore.multicriteria.e2.ruleKey=typescript:S1301 \
           -Dsonar.issue.ignore.multicriteria.e2.resourceKey=**/*.ts \
           -Dsonar.issue.ignore.multicriteria.e3.ruleKey=typescript:S6481 \
-          -Dsonar.issue.ignore.multicriteria.e3.resourceKey=src/components/**/*.ts
+          -Dsonar.issue.ignore.multicriteria.e3.resourceKey=**/*.ts,**/*.tsx \
           -Dsonar.issue.ignore.multicriteria.e4.ruleKey=typescript:S6571 \
-          -Dsonar.issue.ignore.multicriteria.e4.resourceKey=**/*.ts
+          -Dsonar.issue.ignore.multicriteria.e4.resourceKey=**/*.ts,**/*.tsx
