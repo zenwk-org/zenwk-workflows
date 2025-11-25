@@ -73,7 +73,7 @@ jobs:
           -Dsonar.test.inclusions="**/*.test.js,**/*.test.ts,**/*.test.tsx" \
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
           -Dsonar.sourceEncoding=UTF-8 \
-          -Dsonar.issue.ignore.multicriteria=e1,e2,e3,e4, e5 \
+          -Dsonar.issue.ignore.multicriteria=e1,e2,e3,e4,e5 \
           -Dsonar.issue.ignore.multicriteria.e1.ruleKey=typescript:S6754 \
           -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*.tsx \
           -Dsonar.issue.ignore.multicriteria.e2.ruleKey=typescript:S1301 \
