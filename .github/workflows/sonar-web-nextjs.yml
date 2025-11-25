@@ -72,8 +72,7 @@ jobs:
           -Dsonar.tests=src/__tests__ \
           -Dsonar.test.inclusions="**/*.test.js,**/*.test.ts,**/*.test.tsx" \
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-          -Dsonar.sourceEncoding=UTF-8 \  
-          # --- Exclusión de reglas innecesarias / falsos positivos ---
+          -Dsonar.sourceEncoding=UTF-8 \
           -Dsonar.issue.ignore.multicriteria=e1,e2,e3 \
           -Dsonar.issue.ignore.multicriteria.e1.ruleKey=typescript:S6754 \
           -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*.tsx \
