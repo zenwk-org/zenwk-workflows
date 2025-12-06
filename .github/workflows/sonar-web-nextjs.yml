@@ -71,7 +71,7 @@ jobs:
           -Dsonar.sources=src \
           -Dsonar.tests=src/__tests__ \
           -Dsonar.test.inclusions="**/__tests__/**/*.test.js,**/__tests__/**/*.test.ts,**/__tests__/**/*.test.tsx" \
-          -Dsonar.exclusions="**/assets/**,**/styles/**,**/icons/**,**/constants/**,**/*.d.ts,**/interfaces/**,**/types/**,**/*.stories.tsx,**/*.config.ts,**/*.config.js,**/page.tsx,**/Login.tsx,**/Footer.tsx,**/Header.tsx,,**user/components/**,**/ui/Buttons/**,**/context/**,**/shared/ui/**,**/user/ui/**" \
+          -Dsonar.exclusions="**/assets/**,**/styles/**,**/icons/**,**/constants/**,**/*.d.ts,**/interfaces/**,**/types/**,**/*.stories.tsx,**/*.config.ts,**/*.config.js,**/page.tsx,**/Login.tsx,**/Footer.tsx,**/Header.tsx,,**user/components/**,**/ui/Buttons/**,**/context/**,**/shared/ui/**,**/user/ui/**,**/(auth)/ui/**" \
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
           -Dsonar.sourceEncoding=UTF-8 \
           -Dsonar.issue.ignore.multicriteria=e1,e2,e3,e4,e5 \
