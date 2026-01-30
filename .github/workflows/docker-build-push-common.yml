@@ -1,0 +1,76 @@
+name: Build and Push Docker Image (Common)
+
+on:
+  workflow_call:
+    inputs:
+      service_name:
+        required: true
+        type: string
+      image_name:
+        required: true
+        type: string
+      dockerfile_path:
+        required: true
+        type: string
+      build_context:
+        required: true
+        type: string
+      java_version:
+        required: false
+        type: string
+        default: "17"
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java_version }}
+
+      - name: Build JAR
+        working-directory: ${{ inputs.build_context }}
+        run: ./gradlew clean build -x test
+
+      - name: Extract tag from branch
+        run: |
+          BRANCH="${GITHUB_REF##*/}"
+          if [[ "$BRANCH" == "develop" ]]; then
+            echo "TAG=dev" >> $GITHUB_ENV
+          elif [[ "$BRANCH" == "test" ]]; then
+            echo "TAG=test" >> $GITHUB_ENV
+          elif [[ "$BRANCH" == "main" ]]; then
+            echo "TAG=prod" >> $GITHUB_ENV
+          else
+            echo "TAG=dev" >> $GITHUB_ENV
+          fi
+
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t $REGISTRY/${{ inputs.image_name }}:${TAG} \
+            -f ${{ inputs.dockerfile_path }} \
+            ${{ inputs.build_context }}
+
+      - name: Push Docker Image
+        run: |
+          docker push $REGISTRY/${{ inputs.image_name }}:${TAG}
