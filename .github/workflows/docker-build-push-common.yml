@@ -15,6 +15,10 @@ on:
       build_context:
         required: true
         type: string
+      build_java:
+        required: false
+        type: boolean
+        default: true
       java_version:
         required: false
         type: string
@@ -41,29 +45,38 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # =========================
+      # Setup Java (condicional)
+      # =========================
       - name: Set up JDK
+        if: ${{ inputs.build_java }}
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: ${{ inputs.java_version }}
 
       - name: Build JAR
+        if: ${{ inputs.build_java }}
         working-directory: ${{ inputs.build_context }}
         run: ./gradlew clean build -x test
 
+      # =========================
+      # Tag por rama
+      # =========================
       - name: Extract tag from branch
         run: |
           BRANCH="${GITHUB_REF##*/}"
-          if [[ "$BRANCH" == "develop" ]]; then
-            echo "TAG=dev" >> $GITHUB_ENV
-          elif [[ "$BRANCH" == "test" ]]; then
-            echo "TAG=test" >> $GITHUB_ENV
-          elif [[ "$BRANCH" == "main" ]]; then
-            echo "TAG=prod" >> $GITHUB_ENV
-          else
-            echo "TAG=dev" >> $GITHUB_ENV
-          fi
+          case "$BRANCH" in
+            develop) TAG=dev ;;
+            test)    TAG=test ;;
+            main)    TAG=prod ;;
+            *)       TAG=dev ;;
+          esac
+          echo "TAG=$TAG" >> $GITHUB_ENV
 
+      # =========================
+      # Build & Push
+      # =========================
       - name: Build Docker Image
         run: |
           docker build \
