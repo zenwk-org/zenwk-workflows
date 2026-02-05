@@ -1,16 +1,22 @@
+# =========================
 # Compiled class file
+# =========================
 *.class
-
+# =========================
 # Log file
+# =========================
 *.log
-
+# =========================
 # BlueJ files
+# =========================
 *.ctxt
-
+# =========================
 # Mobile Tools for Java (J2ME)
+# =========================
 .mtj.tmp/
-
+# =========================
 # Package Files #
+# =========================
 *.jar
 *.war
 *.nar
@@ -18,7 +24,35 @@
 *.zip
 *.tar.gz
 *.rar
-
+# =========================
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# =========================
 hs_err_pid*
 replay_pid*
+# =========================
+# Gradle
+# =========================
+.gradle/
+**/.gradle/
+build/
+**/build/
+# =========================
+# Gradle internal caches
+# =========================
+**/executionHistory/
+**/buildOutputCleanup/
+**/file-system.probe
+*.bin
+*.lock
+cache.properties
+# =========================
+# Generated plugin outputs
+# =========================
+**/groovy-dsl-plugins/
+**/pluginDescriptors/
+**/tmp/
+# =========================
+# macOS
+# =========================
+.DS_Store
+**/.DS_Store

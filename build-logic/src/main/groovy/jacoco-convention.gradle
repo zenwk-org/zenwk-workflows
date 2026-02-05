@@ -1,0 +1,13 @@
+def candidates = [
+    "${rootDir}/../../zenwk-workflows/common/gradle/jacoco.gradle",
+    "${rootDir}/gradle/jacoco.gradle"
+].collect { file(it) }
+
+def jacocoScript = candidates.find { it.exists() }
+
+if (jacocoScript != null) {
+    apply from: jacocoScript
+    logger.lifecycle("[jacoco] aplicado desde ${jacocoScript.absolutePath}")
+} else {
+    logger.lifecycle("[jacoco] no aplicado (script no encontrado)")
+}

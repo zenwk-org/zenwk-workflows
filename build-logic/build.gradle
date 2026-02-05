@@ -1,0 +1,17 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+gradlePlugin {
+    plugins {
+        jacocoConvention {
+            id = "jacoco-convention"
+            implementationClass = "JacocoConventionPlugin"
+        }
+    }
+}
+
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+}
