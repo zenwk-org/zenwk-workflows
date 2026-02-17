@@ -65,18 +65,19 @@ jobs:
       - name: Configure GitHub Packages credentials
         run: |
           echo "GITHUB_ACTOR=${{ github.actor }}" >> $GITHUB_ENV
-          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "GITHUB_TOKEN=${{ secrets.GRADLE_PLUGIN_TOKEN }}" >> $GITHUB_ENV
           
       # 8. Compila y  ejecuta reporte de jacoco
       - name: Run tests and generate coverage
         working-directory: ${{ inputs.microserviceDir }}
-        run: ./gradlew clean build
+        run: ./gradlew clean test jacocoTestReport
 
       # 9. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
         working-directory: ${{ inputs.microserviceDir }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           ./gradlew sonar \
           -Dsonar.projectKey=${{ inputs.projectKey }} \
