@@ -43,7 +43,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GRADLE_PLUGIN_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # =========================
       # Setup Java (condicional)
@@ -58,6 +58,9 @@ jobs:
       - name: Build JAR
         if: ${{ inputs.build_java }}
         working-directory: ${{ inputs.build_context }}
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GRADLE_PLUGIN_TOKEN }}
         run: ./gradlew clean build -x test
 
       # =========================
