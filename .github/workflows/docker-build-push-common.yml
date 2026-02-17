@@ -23,6 +23,9 @@ on:
         required: false
         type: string
         default: "17"
+    secrets:
+      GRADLE_PLUGIN_TOKEN:
+        required: true
 
 env:
   REGISTRY: ghcr.io
