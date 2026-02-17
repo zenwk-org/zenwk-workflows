@@ -86,6 +86,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
+            --platform linux/amd64,linux/arm64 \
             -t $REGISTRY/${{ inputs.image_name }}:${TAG} \
             -f ${{ inputs.dockerfile_path }} \
             ${{ inputs.build_context }}
