@@ -1,4 +1,4 @@
-name: Reusable SonarCloud Analysis
+name: Reusable SonarCloud Analysis (Common)
 
 on:
   workflow_call:
