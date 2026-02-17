@@ -26,12 +26,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 3. Descargar el common/gradle desde zenwk-workflows
-      - name: Download common gradle 
-        run: |
-          curl -sL https://raw.githubusercontent.com/zenwk-org/zenwk-workflows/main/common/gradle/jacoco.gradle \
-            -o ${{ inputs.microserviceDir }}/gradle/jacoco.gradle
-
       # 4. Configurar JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -66,10 +60,17 @@ jobs:
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-wrapper-
           fetch-depth: 0
+
+      # Esto asegura que el runner pueda resolver el plugin privado 
+      - name: Configure Gradle credentials for GitHub Packages
+        run: |
+          echo "gpr.user=${{ github.actor }}" >> ~/.gradle/gradle.properties
+          echo "gpr.key=${{ secrets.GITHUB_TOKEN }}" >> ~/.gradle/gradle.properties
+          
       # 8. Compila y  ejecuta reporte de jacoco
       - name: Run tests and generate coverage
         working-directory: ${{ inputs.microserviceDir }}
-        run: ./gradlew clean test jacocoTestReport
+        run: ./gradlew clean build
 
       # 9. Build y análisis SonarCloud usando el archivo central
       - name: Build and analyze with SonarCloud
