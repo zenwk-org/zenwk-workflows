@@ -79,18 +79,25 @@ jobs:
             *)       TAG=dev ;;
           esac
           echo "TAG=$TAG" >> $GITHUB_ENV
+          
+      # =========================
+      # Setup QEMU (multi-arch)
+      # =========================
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       # =========================
-      # Build & Push
+      # Build & Push (multi-arch real)
       # =========================
-      - name: Build Docker Image
-        run: |
-          docker build \
-            --platform linux/amd64,linux/arm64 \
-            -t $REGISTRY/${{ inputs.image_name }}:${TAG} \
-            -f ${{ inputs.dockerfile_path }} \
-            ${{ inputs.build_context }}
-
-      - name: Push Docker Image
-        run: |
-          docker push $REGISTRY/${{ inputs.image_name }}:${TAG}
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.build_context }}
+          file: ${{ inputs.dockerfile_path }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ env.REGISTRY }}/${{ inputs.image_name }}:${{ env.TAG }}
+     
