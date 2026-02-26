@@ -1,0 +1,65 @@
+name: Base Docker Deploy
+
+on:
+  workflow_call:
+    inputs:
+      service_name:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, macos, docker]
+
+    environment: ${{ inputs.environment }}
+
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout service repository
+        uses: actions/checkout@v4
+
+      - name: Checkout infra (sparse)
+        uses: actions/checkout@v4
+        with:
+          repository: zenwk-org/zenwk-infra
+          path: infra
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sparse-checkout: |
+            env/${{ inputs.environment }}.env
+            compose/docker-compose.yml
+            compose/docker-compose.${{ inputs.environment }}.yml
+          sparse-checkout-cone-mode: false
+
+      - name: Define variables
+        run: |
+          echo "ENV_FILE=infra/env/${{ inputs.environment }}.env" >> $GITHUB_ENV
+          echo "COMPOSE_BASE=infra/compose/docker-compose.yml" >> $GITHUB_ENV
+          echo "COMPOSE_OVERRIDE=infra/compose/docker-compose.${{ inputs.environment }}.yml" >> $GITHUB_ENV
+
+      - name: Validate required files
+        run: |
+          test -f $ENV_FILE
+          test -f $COMPOSE_BASE
+          test -f $COMPOSE_OVERRIDE
+
+      - name: Pull image
+        run: |
+          docker compose \
+            --env-file $ENV_FILE \
+            -f $COMPOSE_BASE \
+            -f $COMPOSE_OVERRIDE \
+            pull ${{ inputs.service_name }}
+
+      - name: Deploy container
+        run: |
+          docker compose \
+            --env-file $ENV_FILE \
+            -f $COMPOSE_BASE \
+            -f $COMPOSE_OVERRIDE \
+            up -d ${{ inputs.service_name }}
