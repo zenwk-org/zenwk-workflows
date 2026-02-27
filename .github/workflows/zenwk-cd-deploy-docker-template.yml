@@ -9,9 +9,6 @@ on:
       environment:
         required: true
         type: string
-    secrets:
-      GITHUB_TOKEN:
-        required: true
 
 jobs:
   deploy:
@@ -32,7 +29,7 @@ jobs:
         with:
           repository: zenwk-org/zenwk-infra
           path: infra
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           sparse-checkout: |
             env/${{ inputs.environment }}.env
             compose/docker-compose.yml
