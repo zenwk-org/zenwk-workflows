@@ -12,7 +12,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, macOs, docker, ARM64]
+    runs-on: [self-hosted, macOS, docker, ARM64]
 
     environment: ${{ inputs.environment }}
 
